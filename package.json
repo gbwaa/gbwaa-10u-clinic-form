@@ -1,0 +1,12 @@
+{
+  "name": "gbwaa-10u-clinic-form",
+  "version": "1.0.0",
+  "homepage": "https://gbwaa.github.io/gbwaa-10u-clinic-form",
+  "scripts": {
+    "predeploy": "echo \"building...\"",
+    "deploy": "gh-pages -d public"
+  },
+  "devDependencies": {
+    "gh-pages": "^6.0.0"
+  }
+}
