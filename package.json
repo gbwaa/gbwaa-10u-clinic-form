@@ -4,9 +4,9 @@
   "homepage": "https://gbwaa.github.io/gbwaa-10u-clinic-form",
   "scripts": {
     "predeploy": "echo \"building...\"",
-    "deploy": "gh-pages -d public"
+    "deploy": "gh-pages -d public -f"
   },
   "devDependencies": {
-    "gh-pages": "^6.0.0"
+    "gh-pages": "^6.3.0"
   }
 }
