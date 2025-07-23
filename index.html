@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GBWAA 10U Clinic Registration</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script
+      src="https://unpkg.com/react@18/umd/react.development.js"
+      crossorigin
+    ></script>
+    <script
+      src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
+      crossorigin
+    ></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+  </head>
+  <body class="bg-white text-black">
+    <div id="root"></div>
+
+    <script type="text/babel">
+      const { useState } = React;
+
+      function App() {
+        const initialForm = {
+          playerName: "",
+          age: "",
+          lastLevel: "",
+          email: "",
+          phoneNumber: "",
+          volunteer: "",
+        };
+        const [formData, setFormData] = useState(initialForm);
+        const [submitted, setSubmitted] = useState(false);
+        const [loading, setLoading] = useState(false);
+
+        const handleChange = (e) => {
+          const { name, value } = e.target;
+          setFormData((prev) => ({ ...prev, [name]: value }));
+        };
+
+        const resetForm = () => {
+          setFormData(initialForm);
+          setSubmitted(false);
+          setLoading(false);
+        };
+
+        const handleSubmit = async (e) => {
+          e.preventDefault();
+          setLoading(true);
+          const url =
+            "https://script.google.com/macros/s/AKfycbyO711QnP3JYY8lUGEx1IpP6Z0H7SQBge0nNlrZ_11X6WwA-BGIeAX4nUMIHL_MfE4b/exec";
+
+          fetch(url, {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: `Name=${formData.playerName}&Age=${formData.age}&Level=${formData.lastLevel}&Email=${formData.email}&Phone=${formData.phoneNumber}&Volunteer=${formData.volunteer}`,
+          })
+            .then((res) => res.text())
+            .then((data) => {
+              console.log("Response from Google Apps Script:", data);
+              setSubmitted(true); // <-- This triggers the thank-you screen
+              setLoading(false);
+            })
+            .catch((error) => {
+              console.error("Error submitting form:", error);
+              alert(
+                "There was an error submitting the form. Please try again."
+              );
+              setLoading(false);
+            });
+        };
+
+        if (submitted) {
+          return (
+            <div className="min-h-screen flex flex-col justify-center items-center bg-white text-center">
+              <p className="mb-4 text-xl">
+                Your form has been submitted. Would you like to submit another?
+              </p>
+              <button
+                onClick={resetForm}
+                className="px-4 py-2 bg-[rgb(94,41,133)] text-white rounded"
+              >
+                Submit Another
+              </button>
+            </div>
+          );
+        }
+
+        return (
+          <div className="min-h-screen flex flex-col items-center bg-white p-4">
+            <img
+              src="gbwaa_logo.png"
+              alt="GBWAA Logo"
+              className="w-32 mb-4"
+              style={{ imageRendering: "crisp-edges" }}
+            />
+            <div className="text-center mb-4 w-full">
+              <h1 className="text-2xl font-bold text-black">
+                10U Pre-Fall Fast Pitch Clinic
+              </h1>
+              <div className="h-1 bg-[rgb(94,41,133)] mt-1"></div>
+            </div>
+            <form
+              onSubmit={handleSubmit}
+              className="w-full max-w-sm bg-gray-100 p-4 rounded shadow"
+            >
+              <div className="mb-4">
+                <label className="block mb-1" htmlFor="playerName">
+                  Player’s Name
+                </label>
+                <input
+                  id="playerName"
+                  name="playerName"
+                  type="text"
+                  required
+                  value={formData.playerName}
+                  onChange={handleChange}
+                  disabled={loading}
+                  className="w-full p-2 border rounded"
+                />
+              </div>
+
+              <div className="mb-4">
+                <label className="block mb-1" htmlFor="age">
+                  Player’s Age as of August 2025
+                </label>
+                <select
+                  id="age"
+                  name="age"
+                  value={formData.age}
+                  onChange={handleChange}
+                  required
+                  disabled={loading}
+                  className="w-full p-2 border rounded"
+                >
+                  <option value="" disabled>
+                    Select Age
+                  </option>
+                  <option value="8">8</option>
+                  <option value="9">9</option>
+                  <option value="10">10</option>
+                </select>
+              </div>
+
+              <div className="mb-4">
+                <label className="block mb-1" htmlFor="lastLevel">
+                  Last Level of Softball Completed
+                </label>
+                <select
+                  id="lastLevel"
+                  name="lastLevel"
+                  value={formData.lastLevel}
+                  onChange={handleChange}
+                  required
+                  disabled={loading}
+                  className="w-full p-2 border rounded"
+                >
+                  <option value="" disabled>
+                    Select Level
+                  </option>
+                  <option>Spring 8U</option>
+                  <option>Spring 10U</option>
+                  <option>Fall 8U</option>
+                  <option>Fall 10U</option>
+                  <option>Other</option>
+                </select>
+              </div>
+
+              <div className="mb-4">
+                <label className="block mb-1" htmlFor="email">
+                  Parent’s Email
+                </label>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  required
+                  value={formData.email}
+                  onChange={handleChange}
+                  disabled={loading}
+                  className="w-full p-2 border rounded"
+                />
+              </div>
+
+              <div className="mb-4">
+                <label className="block mb-1" htmlFor="phoneNumber">
+                  Parent’s Phone Number
+                </label>
+                <input
+                  id="phoneNumber"
+                  name="phoneNumber"
+                  type="tel"
+                  required
+                  value={formData.phoneNumber}
+                  onChange={handleChange}
+                  disabled={loading}
+                  className="w-full p-2 border rounded"
+                />
+              </div>
+
+              <div className="mb-4">
+                <label className="block mb-1" htmlFor="volunteer">
+                  Would you like to volunteer?
+                </label>
+                <select
+                  id="volunteer"
+                  name="volunteer"
+                  value={formData.volunteer}
+                  onChange={handleChange}
+                  required
+                  disabled={loading}
+                  className="w-full p-2 border rounded"
+                >
+                  <option value="" disabled>
+                    Select an option
+                  </option>
+                  <option value="Yes">Yes</option>
+                  <option value="No">No</option>
+                </select>
+              </div>
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full py-2 bg-[rgb(94,41,133)] text-white rounded flex items-center justify-center"
+              >
+                {loading ? (
+                  <svg
+                    className="animate-spin h-5 w-5 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                    ></path>
+                  </svg>
+                ) : (
+                  "Submit"
+                )}
+              </button>
+            </form>
+          </div>
+        );
+      }
+
+      ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+    </script>
+  </body>
+</html>
